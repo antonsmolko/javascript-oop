@@ -3,8 +3,19 @@ class Set {
      * Создает сет, опционально принимая элементы для добавления
      * @param {...*} [items] Добавляемые элементы
      */
-    constructor() {
-        
+    constructor(...items) {
+        this._key = 0;
+        this._store = this._setStore(items);
+    }
+
+    _setStore(items) {
+        let store = {};
+        for(let key in items) {
+            store[this._key] = items[key];
+            this._key += 1;
+        }
+
+        return store;
     }
 
     /**
@@ -12,7 +23,11 @@ class Set {
      * @returns {number}
      */
     get size() {
-        
+        let size = 0;
+        for(let key in this._store) {
+            if(this._store.hasOwnProperty(key)) size++;
+        }
+        return size;
     }
 
     /**
@@ -20,15 +35,25 @@ class Set {
      * @returns {Array}
      */
     get values() {
-        
+        let values = [];
+        let store = this._store;
+        for(let key in store) {
+            values.push(store[key]);
+        }
+        return values;
     }
 
     /**
      * Добавляет элемент в сет
      * @param {*} item
      */
-    add() {
-        
+    add(item) {
+        if(!this.has(item)) {
+            this._key += 1;            
+            this._store[this._key] = item;
+            // this._store.push(item);
+            return this;            
+        }
     }
 
     /**
@@ -36,8 +61,15 @@ class Set {
      * @param {*} item
      * @returns {boolean}
      */
-    has() {
-        
+    has(item) {
+        let store = this._store;
+        for(let key in store) {
+            if(store[key] == item) {
+                return true;
+            }
+        }
+        // if(this._store.indexOf(item) != -1) return true;
+        return false;
     }
 
     /**
@@ -45,15 +77,25 @@ class Set {
      * @param {*} item
      * @returns {boolean}
      */
-    remove() {
-        
+    remove(item) {
+        let store = this._store;
+        for(let key in store) {
+            if(store[key] == item) {
+                delete store[key];
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
      * Удаляет все элементы в сете
      */
     clear() {
-        
+        this._store = {};
+        this._key = 0;
     }
 
     /**
@@ -61,8 +103,15 @@ class Set {
      * @param {Set} set
      * @returns {Set}
      */
-    union() {
-        
+    union(set) {
+        let setValues = set.values;
+        let unionSet = new Set(...this.values);
+        for(let key in setValues) {
+            if(!unionSet.has(setValues[key])) {
+                unionSet.add(setValues[key]);
+            }
+        }
+        return unionSet;
     }
 
     /**
@@ -70,8 +119,16 @@ class Set {
      * @param {Set} set
      * @returns {Set}
      */
-    intersection() {
-        
+    intersection(set) {
+        let setStore = set.values;
+        let interSet = new Set();
+        for(let key in setStore) {
+            if(this.has(setStore[key])) {
+                interSet.add(setStore[key]);
+            }
+        }
+
+        return interSet;
     }
 
     /**
@@ -79,8 +136,16 @@ class Set {
      * @param {Set} set
      * @returns {Set}
      */
-    difference() {
+    difference(set) {
+        let thisStore = this.values;
+        let diffSet = new Set();
+        for(let key in thisStore) {
+            if(!set.has(thisStore[key])) {
+                diffSet.add(thisStore[key]);
+            }
+        }
         
+        return diffSet;
     }
 
     /**
@@ -88,8 +153,19 @@ class Set {
      * @param {Set} set
      * @returns {boolean}
      */
-    isSubset() {
-        
+    isSubset(set) {
+        let thisValues = this.values;
+        if(this.size > set.size) {
+            return false
+        } else {
+            for(let key in thisValues) {
+                if(!set.has(thisValues[key])) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }
 
