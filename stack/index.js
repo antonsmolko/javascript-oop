@@ -3,17 +3,9 @@ class Stack {
      * Создает стопку, опционально принимая элементы для добавления
      * @param {...*} [items] Добавляемые элементы
      */
-    constructor(...items) {
-        this._store = this._setStore(items);
-    }
-
-    _setStore(items) {
-        let store = [];
-        for(let key in items) {
-            store.push(items[key]);
-        }
-
-        return store;
+    constructor(...rest) {
+        this._store = [];
+        rest.forEach((item) => this._store.push(item));
     }
 
     /**

@@ -3,19 +3,13 @@ class Set {
      * Создает сет, опционально принимая элементы для добавления
      * @param {...*} [items] Добавляемые элементы
      */
-    constructor(...items) {
+    constructor(...rest) {
         this._key = 0;
-        this._store = this._setStore(items);
-    }
-
-    _setStore(items) {
-        let store = {};
-        for(let key in items) {
-            store[this._key] = items[key];
+        this._store = {};
+        rest.forEach((item) => {
+            this._store[this._key] = item;
             this._key += 1;
-        }
-
-        return store;
+        })
     }
 
     /**
