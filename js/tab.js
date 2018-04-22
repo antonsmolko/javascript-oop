@@ -3,10 +3,9 @@ export default class Tab {
      * Создает вкладку.
      * @param {{ element: HTMLElement, onActivate: Function }} args
      */
-    constructor(element, onActivate = false) {
-        this.element = element;
-        this.onActivate = inActivate;
-        this.init();
+    constructor({ element, onActivate = () => {} }) {
+        this.init({ element });
+        this.onActivate = onActivate;
     }
 
     /**
@@ -15,22 +14,28 @@ export default class Tab {
      * Устанавливает обработчик для обработки нажатия на элемент.
      * @private
      */
-    init() {
-
+    init({ element }) {
+        this._element = element;
+        this._active = this._element.classList.contains('active');
+        this._element.addEventListener('click', this.handleClick.bind(this));
     }
 
     /**
      * Возвращает HTML элемент.
      * @returns {HTMLElement}
      */
-    get element() {  }
+    get element() {
+        return this._element;
+    }
 
     /**
      * Возвращает ID вкладки.
      * ID вкладки берется из атрибута `hash` у элемента (`#panel-1` => `panel-1`)
      * @returns {string}
      */
-    get id() {  }
+    get id() {
+        return this.element.hash.substring(1);
+    }
 
     /**
      * `get` - Возвращает `true` или `false` в зависимости от того активна вкладка или нет.
@@ -38,9 +43,16 @@ export default class Tab {
      * `set` - Устанавливает активность вкладки, добавляя или удаляя соответствующий класс
      * @returns {boolean}
      */
-    get isActive() {  }
-    set isActive() {
-
+    get isActive() {
+        return this._active;
+    }
+    set isActive(value) {
+        this._active = value;
+        if(value) {
+            this.element.classList.add('active');
+        } else {
+            this.element.classList.remove('active');
+        }
     }
 
     /**
@@ -52,6 +64,9 @@ export default class Tab {
      * @param {Event} event 
      */
     handleClick(event) {
-
+        this.isActive = true;
+        event.preventDefault();
+        let activeTab = event.target;
+        this.onActivate(this);
     }
 }

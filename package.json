@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "test": "jest --verbose",
-    "test:watch": "jest --verbose --watch"
+    "test:watch": "jest --verbose --watch",
+    "start": "http-server -a localhost -p 8000"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
