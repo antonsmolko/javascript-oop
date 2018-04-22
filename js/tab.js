@@ -3,8 +3,8 @@ export default class Tab {
      * Создает вкладку.
      * @param {{ element: HTMLElement, onActivate: Function }} args
      */
-    constructor() {
-
+    constructor(element, onActivate = false) {
+        this.element = element;
     }
 
     /**
