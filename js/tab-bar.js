@@ -66,8 +66,9 @@ export default class TabBar {
     handleActivate(activeTab) {
         let tabs = this.tabs;
         this._activeTab = activeTab;
-        tabs.forEach(tab => {
+        tabs.forEach((tab, index, tabs) => {
             if(tab.element === activeTab) {
+                this._activeTabIndex = index;
                 tab.isActive = true;
                 this.onChange(tab);
             } else {
