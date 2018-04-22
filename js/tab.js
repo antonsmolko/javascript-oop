@@ -5,6 +5,8 @@ export default class Tab {
      */
     constructor(element, onActivate = false) {
         this.element = element;
+        this.onActivate = inActivate;
+        this.init();
     }
 
     /**
