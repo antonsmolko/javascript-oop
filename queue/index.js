@@ -4,8 +4,7 @@ class Queue {
      * @param {...*} [items] Добавляемые элементы
      */
     constructor(...rest) {
-        this._store = [];
-        rest.forEach((item) => this._store.push(item));
+        this._store = rest;
     }
 
     /**
@@ -33,9 +32,7 @@ class Queue {
      * @returns {*}
      */
     get front() {
-        let store = this._store.slice();
-        let first = store.shift();
-        return first;
+        return this._store[0];
     }
 
     /**
@@ -43,9 +40,7 @@ class Queue {
      * @returns {*}
      */
     get back() {
-        let store = this._store.slice();
-        let last = store.pop();
-        return last;
+        return this._store[this.size - 1];
     }
 
     /**
