@@ -4,8 +4,9 @@ export default class Tab {
      * @param {{ element: HTMLElement, onActivate: Function }} args
      */
     constructor({ element, onActivate = () => {} }) {
-        this.init({ element });
-        this.onActivate = onActivate;
+        this._element = element;
+        this._onActivate = onActivate;
+        this.init();
     }
 
     /**
@@ -14,8 +15,7 @@ export default class Tab {
      * Устанавливает обработчик для обработки нажатия на элемент.
      * @private
      */
-    init({ element }) {
-        this._element = element;
+    init() {
         this._active = this._element.classList.contains('active');
         this._element.addEventListener('click', this.handleClick.bind(this));
     }
@@ -34,7 +34,7 @@ export default class Tab {
      * @returns {string}
      */
     get id() {
-        return this.element.hash.substring(1);
+        return this.element.hash.slice(1);
     }
 
     /**
@@ -48,11 +48,7 @@ export default class Tab {
     }
     set isActive(value) {
         this._active = value;
-        if(value) {
-            this.element.classList.add('active');
-        } else {
-            this.element.classList.remove('active');
-        }
+        this.element.classList.toggle('active', value);
     }
 
     /**
@@ -64,9 +60,8 @@ export default class Tab {
      * @param {Event} event 
      */
     handleClick(event) {
+        event.preventDefault();        
         this.isActive = true;
-        event.preventDefault();
-        let activeTab = event.target;
-        this.onActivate(this);
+        this._onActivate(this);
     }
 }
