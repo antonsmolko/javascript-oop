@@ -55,7 +55,7 @@ class Element extends EventEmitter {
      * @returns {boolean}
      */
     hasClass(className) {
-        return this._className.indexOf(className) === -1 ? false : true;
+        return this._className.indexOf(className) !== -1;
     }
 
     /**
@@ -64,7 +64,11 @@ class Element extends EventEmitter {
      * @param {string} className 
      */
     toggleClass(className) {
-        this.hasClass(className) ? this.removeClass(className) : this.addClass(className);
+        if(this.hasClass(className)) {
+            this.removeClass(className)
+        } else {
+            this.addClass(className);
+        }
     }
 }
 

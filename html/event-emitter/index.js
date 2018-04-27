@@ -9,8 +9,9 @@ class EventEmitter {
      * @param {string} event Название события
      * @param {Function} listener Функция обработчик
      */
-    on(event, ...listener) {
-        this.events[event] = [...listener];
+    on(event, listener) {
+        this.events[event] = this.events[event] || [];
+        this.events[event].push(listener);
     }
 
     /**
@@ -19,11 +20,10 @@ class EventEmitter {
      * @param {string} event Название события
      * @param {*} arg Данные передаваемые слушателю
      */
-    emit(event, listener) {
-        this.events[event].forEach((listener) => {
-            listener();
-        }, arg)
-        
+    emit(event, arg) {
+        if(this.events[event]) {
+            this.events[event].forEach(listener => listener(arg));
+        }
     }
 }
 

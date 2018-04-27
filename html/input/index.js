@@ -11,7 +11,6 @@ class Input extends Element {
         this._value = value;        
         this.disabled = disabled;
         this.required = required;
-        // this._args = args;
     }
 
     /**
@@ -26,7 +25,7 @@ class Input extends Element {
     }
     set value(value) {
         this._value = value;
-        this.on('change', (value) => {return value});
+        this.emit('change', value);
     }
 
     /**
@@ -37,7 +36,10 @@ class Input extends Element {
      * @returns {boolean}
      */
     get isValid() {
-        return this.required ? this.value !== undefind : true;
+        if(this.required && this._value === undefined) {
+            return false;
+        }
+        return true;
     }
 }
 
