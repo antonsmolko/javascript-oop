@@ -3,9 +3,8 @@ class Queue {
      * Создает очередь, опционально принимая элементы для добавления
      * @param {...*} [items] Добавляемые элементы
      */
-    constructor(...rest) {
-        this._store = [];
-        rest.forEach((item) => this._store.push(item));
+    constructor(...items) {
+        this._items = items;
     }
 
     /**
@@ -13,7 +12,7 @@ class Queue {
      * @returns {number}
      */
     get size() {
-        return this._store.length;
+        return this._items.length;
     }
 
     /**
@@ -21,11 +20,7 @@ class Queue {
      * @returns {boolean}
      */
     get isEmpty() {
-        if(this.size === 0) {
-            return true;
-        }
-
-        return false;
+        return this.size === 0;
     }
 
     /**
@@ -33,9 +28,7 @@ class Queue {
      * @returns {*}
      */
     get front() {
-        let store = this._store.slice();
-        let first = store.shift();
-        return first;
+        return this._items[0];
     }
 
     /**
@@ -43,9 +36,7 @@ class Queue {
      * @returns {*}
      */
     get back() {
-        let store = this._store.slice();
-        let last = store.pop();
-        return last;
+        return this._items[this.size - 1];
     }
 
     /**
@@ -53,7 +44,7 @@ class Queue {
      * @param {*} item 
      */
     enqueue(item) {
-        this._store.push(item);
+        this._items.push(item);
     }
 
     /**
@@ -61,7 +52,7 @@ class Queue {
      * @returns {*}
      */
     dequeue () {
-        return this._store.shift();
+        return this._items.shift();
     }
 }
 

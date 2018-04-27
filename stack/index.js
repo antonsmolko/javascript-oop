@@ -3,9 +3,8 @@ class Stack {
      * Создает стопку, опционально принимая элементы для добавления
      * @param {...*} [items] Добавляемые элементы
      */
-    constructor(...rest) {
-        this._store = [];
-        rest.forEach((item) => this._store.push(item));
+    constructor(...items) {
+        this._items = items;
     }
 
     /**
@@ -13,7 +12,7 @@ class Stack {
      * @returns {number}
      */
     get size() {
-        return this._store.length;
+        return this._items.length;
     }
 
     /**
@@ -21,11 +20,7 @@ class Stack {
      * @returns {boolean}
      */
     get isEmpty() {
-        if(this.size === 0) {
-            return true;
-        }
-
-        return false;
+        return this.size === 0;
     }
 
     /**
@@ -33,7 +28,7 @@ class Stack {
      * @param {*} item
      */
     push(item) {
-        this._store.push(item);
+        this._items.push(item);
     }
 
     /**
@@ -41,7 +36,7 @@ class Stack {
      * @returns {*}
      */
     pop() {
-        return this._store.pop();
+        return this._items.pop();
     }
 
     /**
@@ -49,8 +44,7 @@ class Stack {
      * @returns {*}
      */
     peek() {
-        let store = this._store.slice();
-        return store.pop();
+        return this._items[this.size - 1];
     }
 }
 

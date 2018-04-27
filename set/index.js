@@ -3,13 +3,9 @@ class Set {
      * Создает сет, опционально принимая элементы для добавления
      * @param {...*} [items] Добавляемые элементы
      */
-    constructor(...rest) {
-        this._key = 0;
-        this._store = {};
-        rest.forEach((item) => {
-            this._store[this._key] = item;
-            this._key += 1;
-        })
+    constructor(...items) {
+        this._items = [];
+        items.forEach(item => this.add(item));
     }
 
     /**
@@ -17,11 +13,7 @@ class Set {
      * @returns {number}
      */
     get size() {
-        let size = 0;
-        for(let key in this._store) {
-            if(this._store.hasOwnProperty(key)) size++;
-        }
-        return size;
+        return this._items.length;
     }
 
     /**
@@ -29,12 +21,7 @@ class Set {
      * @returns {Array}
      */
     get values() {
-        let values = [];
-        let store = this._store;
-        for(let key in store) {
-            values.push(store[key]);
-        }
-        return values;
+        return this._items;
     }
 
     /**
@@ -42,10 +29,8 @@ class Set {
      * @param {*} item
      */
     add(item) {
-        if(!this.has(item)) {
-            this._key += 1;            
-            this._store[this._key] = item;
-            // this._store.push(item);
+        if(!this.has(item)) {       
+            this._items.push(item);
             return this;            
         }
     }
@@ -56,14 +41,7 @@ class Set {
      * @returns {boolean}
      */
     has(item) {
-        let store = this._store;
-        for(let key in store) {
-            if(store[key] == item) {
-                return true;
-            }
-        }
-        // if(this._store.indexOf(item) != -1) return true;
-        return false;
+        return this._items.includes(item);
     }
 
     /**
@@ -72,24 +50,16 @@ class Set {
      * @returns {boolean}
      */
     remove(item) {
-        let store = this._store;
-        for(let key in store) {
-            if(store[key] == item) {
-                delete store[key];
-
-                return true;
-            }
-        }
-
-        return false;
+        if(!this.has(item)) return false;
+        this._items = this._items.filter(i => i !== item);
+        return true;
     }
 
     /**
      * Удаляет все элементы в сете
      */
     clear() {
-        this._store = {};
-        this._key = 0;
+        this._items = [];
     }
 
     /**
@@ -98,14 +68,7 @@ class Set {
      * @returns {Set}
      */
     union(set) {
-        let setValues = set.values;
-        let unionSet = new Set(...this.values);
-        for(let key in setValues) {
-            if(!unionSet.has(setValues[key])) {
-                unionSet.add(setValues[key]);
-            }
-        }
-        return unionSet;
+        return new Set(...this.values, ...set.values);
     }
 
     /**
@@ -114,15 +77,8 @@ class Set {
      * @returns {Set}
      */
     intersection(set) {
-        let setStore = set.values;
-        let interSet = new Set();
-        for(let key in setStore) {
-            if(this.has(setStore[key])) {
-                interSet.add(setStore[key]);
-            }
-        }
-
-        return interSet;
+        let commonItems = this.values.filter(item => set.has(item));
+        return new Set(...commonItems);
     }
 
     /**
@@ -131,15 +87,8 @@ class Set {
      * @returns {Set}
      */
     difference(set) {
-        let thisStore = this.values;
-        let diffSet = new Set();
-        for(let key in thisStore) {
-            if(!set.has(thisStore[key])) {
-                diffSet.add(thisStore[key]);
-            }
-        }
-        
-        return diffSet;
+        let commonItems = this.values.filter(item => !set.has(item));
+        return new Set(...commonItems);
     }
 
     /**
@@ -148,18 +97,11 @@ class Set {
      * @returns {boolean}
      */
     isSubset(set) {
-        let thisValues = this.values;
         if(this.size > set.size) {
-            return false
+            return false;
         } else {
-            for(let key in thisValues) {
-                if(!set.has(thisValues[key])) {
-                    return false;
-                }
-            }
+            return this.values.every(item => set.has(item));
         }
-
-        return true;
     }
 }
 
