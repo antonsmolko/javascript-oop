@@ -5,7 +5,7 @@ class Input extends Element {
      * @param {{ tag: string, id: string, className: string, type: string, name: string, disabled: boolean, required: boolean }} args 
      */
     constructor({ type = 'text', name, value, disabled = false, required = false, ...args }) {
-        super(args);
+        super({tag: 'input', ...args});
         this.type = type;
         this.name = name;
         this._value = value;        
@@ -36,10 +36,7 @@ class Input extends Element {
      * @returns {boolean}
      */
     get isValid() {
-        if(this.required && this._value === undefined) {
-            return false;
-        }
-        return true;
+        return (this.required && this.value === undefined) ? false : true;
     }
 }
 

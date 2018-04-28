@@ -5,7 +5,7 @@ class EmailInput extends TextInput {
      * @param {{ tag: string, id: string, className: string, type: string, name: string, disabled: boolean, required: boolean, value: string, minlength: string, maxlength: string }} args 
      */
     constructor(args) {
-        super(args);
+        super({type: 'email', ...args});
     }
     
     /**
