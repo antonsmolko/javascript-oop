@@ -5,10 +5,11 @@ export default class App {
      */
     constructor(element, quiz) {
         this.element;
-        this.nextQuestion = 0;
+        this.nextQuestionIndex;
+        this.nextQuestion;
         this.quiz = quiz;
         // this.questionNumber = quiz.length;
-        this.init();
+        this.init(element);
     }
 
     /**
@@ -16,8 +17,13 @@ export default class App {
      * 
      * Получает доступ к DOM-элементам, устанавливает заголовок и подписывается на событие при выборе ответа.
      */
-    init() {
+    init(element) {
         this.element = element;
+        this.nextQuestionIndex = 0;
+        this.nextQuestion = this.quiz.questions[this.nextQuestionIndex];
+        this.title = this.quiz.title;
+        let title = this.element.querySelector("#title");
+        title.textContent = this.title;
     }
 
     /**
@@ -33,21 +39,30 @@ export default class App {
      * Отображает следующий вопрос или отображает результат если тест заверешен.
      */
     displayNext() {
-
+        this.displayQuestion();
+        this.displayAnswers();
     }
 
     /**
      * Отображает вопрос.
      */
     displayQuestion() {
-        
+        let question = this.element.querySelector("#question");
+        question.textContent = this.nextQuestion.text;
     }
 
     /**
      * Отображает ответы.
      */
     displayAnswers() {
-        
+        let answers = this.element.querySelector("#answers");
+        this.nextQuestion.answers.forEach(answerText => {
+                let answer = document.createElement("li");
+                answer.className = "list-group-item list-group-item-action";
+                answer.textContent = answerText;
+                answers.appendChild(answer);
+            }
+        );
     }
 
     /**
