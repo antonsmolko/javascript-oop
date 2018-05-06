@@ -7,7 +7,7 @@ export default class Quiz {
         this.title = title;
         this.questions = questions;
         this.questionsNumber = questions.length;
-        this._currentQuestion = 0;
+        this.currentQuestionIndex = 0;
     }
 
     /**
@@ -16,7 +16,7 @@ export default class Quiz {
      * @returns {Question}
      */
     get currentQuestion() {
-        return this.questions[this._currentQuestion];
+        return this.questions[this.currentQuestionIndex];
     }
 
     /**
@@ -25,7 +25,7 @@ export default class Quiz {
      * @returns {boolean}
      */
     get hasEnded() {
-        return this.currentQuestion >= this.questionsNumber;
+        return this.questions.indexOf(this.currentQuestion) === -1;
     }
 
     /**
@@ -33,6 +33,6 @@ export default class Quiz {
      * @param {*} answer 
      */
     checkAnswer(answer) {
-        
+        return this.currentQuestion.isCorrectAnswer(answer);
     }
 }

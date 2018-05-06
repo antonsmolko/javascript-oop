@@ -17,6 +17,6 @@ export default class Question {
      * @returns {boolean}
      */
     isCorrectAnswer(answer) {
-        return this.correctAnswer === answer;
+        return this.correctAnswer === this.answers.indexOf(answer);
     }
 }

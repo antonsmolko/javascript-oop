@@ -62,5 +62,3 @@ const quiz = new Quiz('JS Quiz', questions.map(q => new Question(q.text, q.answe
 const app = new App(root, quiz);
 
 app.displayNext();
-
-console.log(app.quiz.questionsNumber);

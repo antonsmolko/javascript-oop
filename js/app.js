@@ -5,10 +5,12 @@ export default class App {
      */
     constructor(element, quiz) {
         this.element;
-        this.nextQuestionIndex;
-        this.nextQuestion;
         this.quiz = quiz;
-        // this.questionNumber = quiz.length;
+        this._question;
+        this._answers;
+        this._progress;
+        this._displayScore;
+        this._currentQuestion;
         this.init(element);
     }
 
@@ -19,11 +21,13 @@ export default class App {
      */
     init(element) {
         this.element = element;
-        this.nextQuestionIndex = 0;
-        this.nextQuestion = this.quiz.questions[this.nextQuestionIndex];
-        this.title = this.quiz.title;
+        this._question = this.element.querySelector("#question");
+        this._answers = this.element.querySelector("#answers");
+        this._progress = this.element.querySelector("#progress");
+        this._displayScore = 0;
         let title = this.element.querySelector("#title");
-        title.textContent = this.title;
+        title.textContent = this.quiz.title;
+        this._answers.addEventListener('click', this.handleAnswerButtonClick.bind(this));
     }
 
     /**
@@ -32,34 +36,47 @@ export default class App {
      * @param {Event} event 
      */
     handleAnswerButtonClick(event) {
-        return event;
+        if(this._currentQuestion.isCorrectAnswer(event.target.textContent)) {
+            this._displayScore += 1;
+        }
+        this.quiz.currentQuestionIndex += 1;
+        this.displayNext();
     }
 
     /**
      * Отображает следующий вопрос или отображает результат если тест заверешен.
      */
     displayNext() {
-        this.displayQuestion();
-        this.displayAnswers();
+        if(this.quiz.hasEnded) {
+            this.displayScore();
+            this._question.remove();
+            this._answers.remove();
+            this._progress.remove();
+        } else {
+            this._currentQuestion = this.quiz.currentQuestion;
+            this.displayQuestion();
+            this.displayAnswers();
+            this.displayProgress()
+        }
+        
     }
 
     /**
      * Отображает вопрос.
      */
     displayQuestion() {
-        let question = this.element.querySelector("#question");
-        question.textContent = this.nextQuestion.text;
+        this._question.innerHTML = this._currentQuestion.text;
     }
 
     /**
      * Отображает ответы.
      */
     displayAnswers() {
-        let answers = this.element.querySelector("#answers");
-        this.nextQuestion.answers.forEach(answerText => {
+        this._answers.innerHTML = '';
+        this._currentQuestion.answers.forEach(answerText => {
                 let answer = document.createElement("li");
                 answer.className = "list-group-item list-group-item-action";
-                answer.textContent = answerText;
+                answer.innerHTML = answerText;
                 answers.appendChild(answer);
             }
         );
@@ -69,13 +86,16 @@ export default class App {
      * Отображает прогресс ('Вопрос 1 из 5').
      */
     displayProgress() {
-        
+        let currentQuestionNumber = this.quiz.currentQuestionIndex + 1;
+        this._progress.innerHTML = `Вопрос ${currentQuestionNumber} из ${this.quiz.questionsNumber}`;
     }
 
     /**
      * Отображает результат теста.
      */
     displayScore() {
-        
+        let score = this.element.querySelector("#score");
+        score.textContent = `Правильных ответов ${this._displayScore}`;
+
     }
 }
