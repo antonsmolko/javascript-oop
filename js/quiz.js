@@ -32,7 +32,7 @@ export default class Quiz {
      * Проверяет правильность ответа выбранного пользователем.
      * @param {*} answer 
      */
-    checkAnswer(answer) {
-        return this.currentQuestion.isCorrectAnswer(answer);
+    checkAnswer() {
+        return this.currentQuestion.isCorrectAnswer();
     }
 }

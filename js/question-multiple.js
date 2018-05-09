@@ -9,17 +9,31 @@ export default class QuestionMultiple extends Question {
     constructor(args) {
         super(args);
         this._correctAnswers = args.correctAnswers;
-        this._ownAnswers = [];
+        this._ownAnswer = [];
+    }
+
+    get ownAnswer() {
+        return this._ownAnswer;
+    }
+
+    set ownAnswer(value) {
+        let indexAnswer = this.answers.indexOf(value);
+        if (this._ownAnswer.includes(indexAnswer)) {
+            let removableAnswer = this._ownAnswer.indexOf(indexAnswer);
+            this._ownAnswer.splice(removableAnswer, 1);               
+        } else {
+            this._ownAnswer.push(indexAnswer);  
+        }
     }
 
     /**
-     * Проверяет правильность ответа.
+     * Проверяет правильность ответов.
      * 
      * @param {number} answers
      * @returns {boolean}
      */
-    isCorrectAnswer(answers) {
-        return (answers.length === this._correctAnswers.length) && answers.every(answer => this._correctAnswers.includes(answer));
+    isCorrectAnswer() {
+        return (this.ownAnswer.length === this._correctAnswers.length) && this.ownAnswer.every(answer => this._correctAnswers.includes(answer));
     }
 
 }

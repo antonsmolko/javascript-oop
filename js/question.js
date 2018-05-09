@@ -16,7 +16,7 @@ export default class Question {
         this.answers = args.answers;
         this._correctAnswer = args.correctAnswer;
         this._ownAnswer = '';
-        this._type = args.type;
+        this.type = args.type;
         this.verification;
     }
     // /**
@@ -28,13 +28,7 @@ export default class Question {
     //     this._ownAnswer = answer;
     // }
 
-    /**
-     * Проверяет правильность ответа.
-     * 
-     * @returns {boolean}
-     */
-    isCorrectAnswer(value) {
-        // return this._correctAnswer === this.answers.indexOf(this.ownAnswer);
-        return verifications[this._type](value);
+    get correctAnswer() {
+        return this._correctAnswer;
     }
 }

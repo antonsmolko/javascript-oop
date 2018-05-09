@@ -6,17 +6,17 @@ export default class QuestionOpen extends Question {
      * @param {string} text Текст вопроса
      * @param {string} correctAnswer Индекс правильного ответа
      */
-    constructor(type, text, correctAnswer) {
-        super(type, text, correctAnswer);
+    constructor(args) {
+        super(args);
+        this._correctAnswer = args.correctAnswer;
     }
 
     /**
      * Проверяет правильность ответа.
      * 
-     * @param {string} answer
      * @returns {boolean}
      */
-    isCorrectAnswer(answer) {
-        return this.correctAnswer === answer;
+    isCorrectAnswer() {
+        return this.correctAnswer.toLowerCase() === this.ownAnswer.toLowerCase();
     }
 }

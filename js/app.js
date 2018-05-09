@@ -10,6 +10,7 @@ export default class App {
         this.quiz = quiz;
         this._question;
         this._answers;
+        this._button;
         this._progress;
         this._displayScore;
         this._currentQuestion;
@@ -25,25 +26,43 @@ export default class App {
         this.element = element;
         this._question = this.element.querySelector("#question");
         this._answers = this.element.querySelector("#answers");
+        this._button = this.element.querySelector("#answer-button");
+        this._button.disabled = true;
         this._progress = this.element.querySelector("#progress");
         this._displayScore = 0;
         this._currentQuestion = this.quiz.currentQuestion;
         let title = this.element.querySelector("#title");
         title.textContent = this.quiz.title;
-        if(this._currentQuestion.type === 'single') {
-            console.log('single');
-        }
         this._answers.addEventListener('click', this.handleOwnAnswer.bind(this));
+        this._button.addEventListener('click', this.handleAnswerButtonClick.bind(this));
+
     }
 
     /**
      * Обрабатывает событие при выборе ответа.
      * 
-     * @param {Event} event 
+     * @param {Event} event
      */
     handleOwnAnswer(event) {
-        let ownAnswer = event.target.textContent;
-        this.currentQuestion.ownAnswer()
+        let answer = event.target;
+        if (this._currentQuestion.type === 'multiple') {
+            this._currentQuestion.ownAnswer = answer.textContent;
+            answer.classList.toggle("active");
+            this._button.disabled = (this._currentQuestion.ownAnswer.length === 0);                  
+        } else if (this._currentQuestion.type === 'single') {
+            for (let i=0; i < this._answers.children.length; i++) {
+               this._answers.children[i].classList.toggle("active", this._answers.children[i] === answer);
+            }
+            this._currentQuestion.ownAnswer = answer.textContent;
+            this._button.disabled = (this._currentQuestion.ownAnswer.length === 0);
+        } else if (this._currentQuestion.type === 'open') {
+            let answer = this._answers.querySelector("input");
+            answer.addEventListener('input', event => {
+                this._currentQuestion.ownAnswer = event.target.value.trim();
+                this._button.disabled = this._currentQuestion.ownAnswer === '';
+                console.log(this._currentQuestion.ownAnswer);
+            });
+        }
     }
 
     /**
@@ -52,11 +71,13 @@ export default class App {
      * @param {Event} event 
      */
     handleAnswerButtonClick(event) {
-        
-        if(this._currentQuestion.isCorrectAnswer(event.target.textContent)) {
+        console.log(this.quiz.checkAnswer());
+        if(this.quiz.checkAnswer()) {
             this._displayScore += 1;
         }
+        console.log(this._displayScore);
         this.quiz.currentQuestionIndex += 1;
+        this._currentQuestion = this.quiz.currentQuestion
         this.displayNext();
     }
 
@@ -66,6 +87,7 @@ export default class App {
     displayNext() {
         if(this.quiz.hasEnded) {
             this.displayScore();
+            this._button.remove();
             this._question.remove();
             this._answers.remove();
             this._progress.remove();
@@ -74,7 +96,6 @@ export default class App {
             this.displayAnswers();
             this.displayProgress()
         }
-        
     }
 
     /**
@@ -89,7 +110,8 @@ export default class App {
      */
     displayAnswers() {
         let renderer = new Renderer(this._answers);
-        if(this._currentQuestion.answers !== undefined) {
+        this._button.disabled = true;
+        if(this._currentQuestion.answers !== undefined) {      
             renderer.renderAnswers(this._currentQuestion.answers);
         } else {
             renderer.renderInput();
@@ -110,6 +132,5 @@ export default class App {
     displayScore() {
         let score = this.element.querySelector("#score");
         score.textContent = `Правильных ответов ${this._displayScore}`;
-
     }
 }

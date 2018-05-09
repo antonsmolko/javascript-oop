@@ -10,3 +10,7 @@ body {
 .list-group-item-action {
     cursor: pointer;
 }
+
+.w-auto {
+    width: auto;
+}
