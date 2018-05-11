@@ -60,7 +60,6 @@ export default class App {
             answer.addEventListener('input', event => {
                 this._currentQuestion.ownAnswer = event.target.value.trim();
                 this._button.disabled = this._currentQuestion.ownAnswer === '';
-                console.log(this._currentQuestion.ownAnswer);
             });
         }
     }
@@ -71,11 +70,9 @@ export default class App {
      * @param {Event} event 
      */
     handleAnswerButtonClick(event) {
-        console.log(this.quiz.checkAnswer());
         if(this.quiz.checkAnswer()) {
             this._displayScore += 1;
         }
-        console.log(this._displayScore);
         this.quiz.currentQuestionIndex += 1;
         this._currentQuestion = this.quiz.currentQuestion
         this.displayNext();

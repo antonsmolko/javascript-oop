@@ -1,6 +1,5 @@
 import App from './app.js';
 import Quiz from './quiz.js';
-// import Question from './question.js';
 import QuestionSingle from './question-single.js';
 import QuestionMultiple from './question-multiple.js';
 import QuestionOpen from './question-open.js';
