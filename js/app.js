@@ -27,7 +27,7 @@ export default class App {
         this._question = this.element.querySelector("#question");
         this._answers = this.element.querySelector("#answers");
         this._button = this.element.querySelector("#answer-button");
-        this._button.disabled = true;
+        this.stateButton = true;
         this._progress = this.element.querySelector("#progress");
         this._displayScore = 0;
         this._currentQuestion = this.quiz.currentQuestion;
@@ -36,6 +36,19 @@ export default class App {
         this._answers.addEventListener('click', this.handleOwnAnswer.bind(this));
         this._button.addEventListener('click', this.handleAnswerButtonClick.bind(this));
 
+    }
+
+     /**
+     * Устанавливает состояние кнопки Отправить
+     * 
+     */
+
+    setStateButton() {
+        this._button.disabled = (this._currentQuestion.ownAnswer.length === 0);
+    }
+
+    set stateButton(value) {
+        this._button.disabled = value;
     }
 
     /**
@@ -48,18 +61,18 @@ export default class App {
         if (this._currentQuestion.type === 'multiple') {
             this._currentQuestion.ownAnswer = answer.textContent;
             answer.classList.toggle("active");
-            this._button.disabled = (this._currentQuestion.ownAnswer.length === 0);                  
+            this.setStateButton();
         } else if (this._currentQuestion.type === 'single') {
             for (let i=0; i < this._answers.children.length; i++) {
                this._answers.children[i].classList.toggle("active", this._answers.children[i] === answer);
             }
             this._currentQuestion.ownAnswer = answer.textContent;
-            this._button.disabled = (this._currentQuestion.ownAnswer.length === 0);
+            this.setStateButton();            
         } else if (this._currentQuestion.type === 'open') {
             let answer = this._answers.querySelector("input");
             answer.addEventListener('input', event => {
                 this._currentQuestion.ownAnswer = event.target.value.trim();
-                this._button.disabled = this._currentQuestion.ownAnswer === '';
+                this.setStateButton();                
             });
         }
     }
@@ -69,7 +82,7 @@ export default class App {
      * 
      * @param {Event} event 
      */
-    handleAnswerButtonClick(event) {
+    handleAnswerButtonClick(event) {        
         if(this.quiz.checkAnswer()) {
             this._displayScore += 1;
         }
@@ -107,7 +120,7 @@ export default class App {
      */
     displayAnswers() {
         let renderer = new Renderer(this._answers);
-        this._button.disabled = true;
+        this.stateButton = true;
         if(this._currentQuestion.answers !== undefined) {      
             renderer.renderAnswers(this._currentQuestion.answers);
         } else {
@@ -128,6 +141,6 @@ export default class App {
      */
     displayScore() {
         let score = this.element.querySelector("#score");
-        score.textContent = `Правильных ответов ${this._displayScore}`;
+        score.textContent = `Правильных ответов ${this._displayScore} из ${this.quiz.questionsNumber}`;
     }
 }

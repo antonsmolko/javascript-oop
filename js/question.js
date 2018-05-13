@@ -1,7 +1,7 @@
 const verifications = {
-    single: answer => this._correctAnswer === this.answers.indexOf(answer),
-    multiple: answers => (answers.length === this._correctAnswers.length) && answers.every(answer => this._correctAnswers.includes(answer)),
-    open: answer => this.correctAnswer === answer
+    single: (ownAnswer, correctAnswer, answers) => correctAnswer === answers.indexOf(ownAnswer),
+    multiple: (ownAnswer, correctAnswer, answers) => (ownAnswer.length === correctAnswer.length) && ownAnswer.every(ans => correctAnswer.includes(ans)),
+    open: (ownAnswer, correctAnswer) => correctAnswer.toLowerCase() === ownAnswer.toLowerCase()
 }
 
 export default class Question {
@@ -10,25 +10,28 @@ export default class Question {
      * @param {string[]} answers Варианты ответов
      * @param {number} correctAnswer Индекс правильного ответа
      */
-    // constructor(type, text, answers, correctAnswer) {
     constructor(args) {
         this.text = args.text;
         this.answers = args.answers;
         this._correctAnswer = args.correctAnswer;
         this._ownAnswer = '';
         this.type = args.type;
-        this.verification;
     }
-    // /**
-    //  * Проверяет правильность ответа.
-    //  * 
-    //  * @param {number} answer
-    //  */
-    // set ownAnswer(answer) {
-    //     this._ownAnswer = answer;
-    // }
+    
+    get ownAnswer() {
+        return this._ownAnswer;
+    }
 
-    get correctAnswer() {
-        return this._correctAnswer;
+    set ownAnswer(value) {
+        this._ownAnswer = value;
+    }
+
+    /**
+     * Проверяет правильность ответа.
+     * 
+     */
+
+    get isCorrectAnswer() {
+        return verifications[this.type](this.ownAnswer, this._correctAnswer, this.answers);
     }
 }

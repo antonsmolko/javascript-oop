@@ -33,6 +33,6 @@ export default class Quiz {
      * @param {*} answer 
      */
     checkAnswer() {
-        return this.currentQuestion.isCorrectAnswer();
+        return this.currentQuestion.isCorrectAnswer;
     }
 }
