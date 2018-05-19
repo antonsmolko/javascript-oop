@@ -27,9 +27,9 @@
 			<input type="range" id="brush-size-slider" min="1" max="10" value="1">
 
 			<div id="color-picker">
-				<span class="color-picker__preview"></span>
+				<span class="color-picker__preview" id="preview"></span>
 
-				<div class="color-picker__sliders">
+				<div class="color-picker__sliders" id="sliders">
 					<label>R
 						<input type="range" id="red" class="color-picker__slider" name="red" min="0" max="255" value="0">
 					</label>
@@ -43,12 +43,12 @@
 					</label>
 				</div>
 
-				<div class="color-picker__controls">
-					<button class="color-picker__add-button">
+				<div class="color-picker__controls" id="controls">
+					<button class="color-picker__add-button" id="check">
 						<i class="material-icons">check</i>
 					</button>
 
-					<button class="color-picker__close-button">
+					<button class="color-picker__close-button" id="close">
 						<i class="material-icons">clear</i>
 					</button>
 				</div>
