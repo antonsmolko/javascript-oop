@@ -1,7 +1,8 @@
 import App from './app.js';
 import Quiz from './quiz.js';
-import Question from './question.js';
+import QuestionSingle from './question-single.js';
 import QuestionMultiple from './question-multiple.js';
+import QuestionOpen from './question-open.js';
 
 const questions = [
     {
@@ -61,9 +62,9 @@ const questions = [
 ];
 
 const getQuestion = {
-    single: args => new Question(args),
+    single: args => new QuestionSingle(args),
     multiple: args => new QuestionMultiple(args),
-    open: args => new Question(args)
+    open: args => new QuestionOpen(args)
 }
 
 const root = document.querySelector('#app');

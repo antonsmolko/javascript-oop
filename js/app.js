@@ -22,6 +22,7 @@ export default class App {
      * 
      * Получает доступ к DOM-элементам, устанавливает заголовок и подписывается на событие при выборе ответа.
      */
+
     init(element) {
         this.element = element;
         this._question = this.element.querySelector("#question");
@@ -34,8 +35,11 @@ export default class App {
         let title = this.element.querySelector("#title");
         title.textContent = this.quiz.title;
         this._answers.addEventListener('click', this.handleOwnAnswer.bind(this));
-        this._button.addEventListener('click', this.handleAnswerButtonClick.bind(this));
+        
 
+
+        this._button.addEventListener('click', this.handleAnswerButtonClick.bind(this));
+        
     }
 
      /**
@@ -43,8 +47,8 @@ export default class App {
      * 
      */
 
-    setStateButton() {
-        this._button.disabled = (this._currentQuestion.ownAnswer.length === 0);
+    handleSetButton(validate) {
+        this._button.disabled = validate;
     }
 
     set stateButton(value) {
@@ -58,23 +62,8 @@ export default class App {
      */
     handleOwnAnswer(event) {
         let answer = event.target;
-        if (this._currentQuestion.type === 'multiple') {
-            this._currentQuestion.ownAnswer = answer.textContent;
-            answer.classList.toggle("active");
-            this.setStateButton();
-        } else if (this._currentQuestion.type === 'single') {
-            for (let i=0; i < this._answers.children.length; i++) {
-               this._answers.children[i].classList.toggle("active", this._answers.children[i] === answer);
-            }
-            this._currentQuestion.ownAnswer = answer.textContent;
-            this.setStateButton();            
-        } else if (this._currentQuestion.type === 'open') {
-            let answer = this._answers.querySelector("input");
-            answer.addEventListener('input', event => {
-                this._currentQuestion.ownAnswer = event.target.value.trim();
-                this.setStateButton();                
-            });
-        }
+        this._currentQuestion.doAnswer(answer);
+        this.handleSetButton(this._currentQuestion.validate);
     }
 
     /**
@@ -119,13 +108,8 @@ export default class App {
      * Отображает ответы.
      */
     displayAnswers() {
-        let renderer = new Renderer(this._answers);
         this.stateButton = true;
-        if(this._currentQuestion.answers !== undefined) {      
-            renderer.renderAnswers(this._currentQuestion.answers);
-        } else {
-            renderer.renderInput();
-        }
+        this._answers.innerHTML = this._currentQuestion.render();
     }
 
     /**

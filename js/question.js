@@ -1,9 +1,3 @@
-const verifications = {
-    single: (ownAnswer, correctAnswer, answers) => correctAnswer === answers.indexOf(ownAnswer),
-    multiple: (ownAnswer, correctAnswer, answers) => (ownAnswer.length === correctAnswer.length) && ownAnswer.every(ans => correctAnswer.includes(ans)),
-    open: (ownAnswer, correctAnswer) => correctAnswer.toLowerCase() === ownAnswer.toLowerCase()
-}
-
 export default class Question {
     /**
      * @param {string} text Текст вопроса
@@ -16,6 +10,7 @@ export default class Question {
         this._correctAnswer = args.correctAnswer;
         this._ownAnswer = '';
         this.type = args.type;
+        this.doValidate = () => {};
     }
     
     get ownAnswer() {
@@ -26,12 +21,20 @@ export default class Question {
         this._ownAnswer = value;
     }
 
+    get validate() {
+        return this._validate;
+    }
+
+    set validate(value) {
+        this._validate = value;
+    }
+
     /**
      * Проверяет правильность ответа.
      * 
      */
 
-    get isCorrectAnswer() {
-        return verifications[this.type](this.ownAnswer, this._correctAnswer, this.answers);
-    }
+    // get isCorrectAnswer() {
+    //     return verifications[this.type](this.ownAnswer, this._correctAnswer, this.answers);
+    // }
 }

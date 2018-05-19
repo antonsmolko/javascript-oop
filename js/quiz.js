@@ -8,6 +8,8 @@ export default class Quiz {
         this.questions = questions;
         this.questionsNumber = questions.length;
         this.currentQuestionIndex = 0;
+        // this.setButton = () => {};
+        // this.init();
     }
 
     /**
@@ -19,6 +21,10 @@ export default class Quiz {
         return this.questions[this.currentQuestionIndex];
     }
 
+    // set currentQuestion(value) {
+
+    // }
+
     /**
      * Возвращает `true/false` в зависимости от того закончился тест или нет.
      * 
@@ -28,6 +34,10 @@ export default class Quiz {
         return this.questions.indexOf(this.currentQuestion) === -1;
     }
 
+    // init() {
+    //     this.currentQuestion.doValidate = this.handleValidate.bind(this);
+    // }
+
     /**
      * Проверяет правильность ответа выбранного пользователем.
      * @param {*} answer 
@@ -35,4 +45,8 @@ export default class Quiz {
     checkAnswer() {
         return this.currentQuestion.isCorrectAnswer;
     }
+
+    // handleValidate(validate) {
+    //     this.setButton(validate);
+    // }
 }
