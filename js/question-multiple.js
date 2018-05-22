@@ -1,25 +1,22 @@
 import Question from './question.js';
 
 export default class QuestionMultiple extends Question {
-    constructor(args) {
-        super(args);
-        this.init();
-    }
-
-    init() {
-        const answers = document.querySelectorAll('.list-group-item.list-group-item-action');
-        [].forEach.call(answers, answer => {
-            answer.addEventListener('click', () => {
-                this.handleClickAnswer.bind(this);
-                this.validate();
-            });
-        });
-    }
     
+    /**
+     * Возвращает результат ответа на текущий вопрос.
+     * 
+     * @returns {Array}
+     */
     get ownAnswer() {
         return this._ownAnswer;
     }
 
+    /**
+     * Записывает ответ на текущий вопрос.
+     * Проверяет, если поступивший ответ уже есть в массиве - то удаляет его, иначе добавляет
+     * 
+     * @param {String} value
+     */
     set ownAnswer(value) {
         let indexAnswer = this.answers.indexOf(value);
         if (this._ownAnswer.includes(indexAnswer)) {
@@ -34,27 +31,39 @@ export default class QuestionMultiple extends Question {
     /**
      * Проверяет правильность ответа.
      * 
+     * @return {boolean}
      */
     get isCorrectAnswer() {
         return (this._ownAnswer.length === this._correctAnswer.length) && this._ownAnswer.every(ans => this._correctAnswer.includes(ans));
     }
 
+    /**
+     * Осуществляет рендеринг вариантов ответа.
+     * Подписывается на событие при выборе ответа.
+     * 
+     */
     render() {
-        let answers = '';
-        this.answers.forEach(answer => {
-            answers += `<div class="list-group-item list-group-item-action">${answer}</div>`;
+        this._element.innerHtml = '';
+        this.answers.forEach(answerText => {
+            let answer = document.createElement('div');
+            answer.className = 'list-group-item list-group-item-action';
+            answer.innerText = answerText;
+            this._element.appendChild(answer);
+            answer.addEventListener('click', this.handleClickAnswer.bind(this));
         })
-        return answers;
+
     }
 
+    /**
+     * Записывает ответ в свойство _ownAnswer, меняет состояние ответов на "active" и обратно
+     * Вызывает функцию _doAnswer и передает в нее значение валидации для изменения состояния кнопки "Ответить"
+     * 
+     * @param {event} event
+     */
     handleClickAnswer(event) {
         let answer = event.target;
         this.ownAnswer = answer.textContent;
-        this.doAnswer(this);
+        answer.classList.toggle("active");
+        this._doAnswer(this.validate());
     }
-
-    // doAnswer(answer) {
-    //     this.ownAnswer = answer.textContent;
-    //     answer.classList.toggle("active");
-    // }
 }

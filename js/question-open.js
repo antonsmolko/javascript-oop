@@ -1,23 +1,38 @@
 import Question from './question.js';
 
 export default class QuestionOpen extends Question {
+    
     /**
      * Проверяет правильность ответа.
      * 
+     * @return {boolean}
      */
     get isCorrectAnswer() {
         return this._correctAnswer.toLowerCase() === this._ownAnswer.toLowerCase();
     }
 
+    /**
+     * Осуществляет рендеринг поля input для ввода ответа.
+     * Подписывается на событие при вводе ответа.
+     * 
+     */
     render() {
-        return '<div class="form-group"><input class="form-control"></div>';
+        this._element.innerHTML = '';
+        let answer = document.createElement('input');
+        answer.className = 'form-control';
+        this._element.appendChild(answer);
+        answer.addEventListener('input', this.handleClickAnswer.bind(this));
     }
 
-    doAnswer(answer) {
-        answer.addEventListener('input', event => {
-            this.ownAnswer = event.target.value.trim();
-            this.validate = this.ownAnswer.length === 0;      
-            this.doValidate(this.validate);         
-        });
+    /**
+     * Записывает ответ в свойство _ownAnswer
+     * Вызывает функцию _doAnswer и передает в нее значение валидации для изменения состояния кнопки "Ответить"
+     * 
+     * @param {event} event
+     */
+    handleClickAnswer(event) {
+        let answer = event.target;
+        this.ownAnswer = answer.value.trim();
+        this._doAnswer(this.validate());
     }
 }
