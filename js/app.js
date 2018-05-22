@@ -36,10 +36,7 @@ export default class App {
         title.textContent = this.quiz.title;
         this._answers.addEventListener('click', this.handleOwnAnswer.bind(this));
         
-
-
         this._button.addEventListener('click', this.handleAnswerButtonClick.bind(this));
-        
     }
 
      /**

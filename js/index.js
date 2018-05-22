@@ -69,7 +69,9 @@ const getQuestion = {
 
 const root = document.querySelector('#app');
 
-const quiz = new Quiz('JS Quiz', questions.map(q => {
+const element = document.querySelector('#quiz');
+
+const quiz = new Quiz('JS Quiz', element, questions.map(q => {
     return getQuestion[q.type](q);
 }));
 

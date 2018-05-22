@@ -10,7 +10,7 @@ export default class Question {
         this._correctAnswer = args.correctAnswer;
         this._ownAnswer = '';
         this.type = args.type;
-        this.doValidate = () => {};
+        this.doAnswer = () => {};
     }
     
     get ownAnswer() {
@@ -21,12 +21,8 @@ export default class Question {
         this._ownAnswer = value;
     }
 
-    get validate() {
-        return this._validate;
-    }
-
-    set validate(value) {
-        this._validate = value;
+    validate() {
+        return this._ownAnswer.length === 0;
     }
 
     /**

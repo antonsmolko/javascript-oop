@@ -1,6 +1,20 @@
 import Question from './question.js';
 
 export default class QuestionMultiple extends Question {
+    constructor(args) {
+        super(args);
+        this.init();
+    }
+
+    init() {
+        const answers = document.querySelectorAll('.list-group-item.list-group-item-action');
+        [].forEach.call(answers, answer => {
+            answer.addEventListener('click', () => {
+                this.handleClickAnswer.bind(this);
+                this.validate();
+            });
+        });
+    }
     
     get ownAnswer() {
         return this._ownAnswer;
@@ -33,10 +47,14 @@ export default class QuestionMultiple extends Question {
         return answers;
     }
 
-    doAnswer(answer) {
+    handleClickAnswer(event) {
+        let answer = event.target;
         this.ownAnswer = answer.textContent;
-        answer.classList.toggle("active");
-        this.validate = this.ownAnswer.length === 0;      
-        this.doValidate(this.validate);
+        this.doAnswer(this);
     }
+
+    // doAnswer(answer) {
+    //     this.ownAnswer = answer.textContent;
+    //     answer.classList.toggle("active");
+    // }
 }
