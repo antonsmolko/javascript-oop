@@ -1,4 +1,9 @@
 export default class App {
+    /**
+     * @param {HTMLElement} canvas
+     * @param {ColorPalette} solorPalette
+     * @param {ColorPicker} colorPicker 
+     */
     constructor({ canvas, colorPalette, colorPicker }) {
         this.canvas = canvas;
         this.palette = colorPalette;
@@ -8,6 +13,16 @@ export default class App {
         this.init();
     }
 
+    /**
+     * Инициализирует объект.
+     * Получает доступ к DOM-элементам.
+     * Подписывается на события: mousedown, mousemove, mouseup, mouseleave.
+     * Подписывается на событие click по кнопке #clear-canvas-button.
+     * Подписывается на событие change слайдера #brush-size-slider.
+     * Подписывается на событие click слайдера #new-color-button.
+     * Подписывается на событие выбора цвета в ColorPalette и устанавливает обработчик.
+     * Подписывается на событие добавления цвета в ColorPicker и устанавливает обработчик.
+     */
     init() {
         this.context = this.canvas.getContext('2d');
         this.clearCanvasButton = document.querySelector('#clear-canvas-button');

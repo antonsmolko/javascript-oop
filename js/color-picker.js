@@ -1,7 +1,7 @@
 export default class ColorPicker {
-    constructor({ element, addColor = () => {} }) {
+    constructor({ element }) {
         this.element = element;
-        this.addColor = addColor;
+        this.addColor = () => {};
         this._preview;
         this._sliders;
         this._close;
@@ -30,7 +30,6 @@ export default class ColorPicker {
     }
 
     set open(value) {
-        this._open = value;
         this.element.classList.toggle('open', value);
         this.render(this._colorPreview);
     }

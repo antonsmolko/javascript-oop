@@ -1,9 +1,10 @@
 export default class ColorPalette {
-    constructor({ element, colors, colorChange = () => {} }) {
+    constructor({ element, colors, colorClassName }) {
         this.element = element;
         this._colors = colors;
-        this.colorChange = colorChange;
+        this._colorChange = () => {};
         this._selectedColorIndex = 0;
+        this.colorClassName = colorClassName;
         this.init();
     }
 
@@ -16,7 +17,7 @@ export default class ColorPalette {
         this.element.innerHTML = '';
         this._colors.forEach(color => {
             let paletteColor = document.createElement('li');
-            paletteColor.classList.add('color-palette__color');
+            paletteColor.classList.add(this.colorClassName);
             paletteColor.style.backgroundColor = `rgb(${color.red}, ${color.green}, ${color.blue}`;
             this.element.appendChild(paletteColor);
         })
@@ -25,9 +26,9 @@ export default class ColorPalette {
 
     set selectedColorIndex(value) {
         this._selectedColorIndex = value;
-        let elems = this.element.children;
-        [].forEach.call(elems, (elem, index) => {
-            elem.classList.toggle('selected', index === value);
+        let colors = this.element.querySelectorAll('li');
+        [].forEach.call(colors, (color, index) => {
+            color.classList.toggle('selected', index === value);
         });
     }
 
@@ -48,13 +49,13 @@ export default class ColorPalette {
     }
 
     handleColorChange(event) {
-        let elems = this.element.children;
-        [].forEach.call(elems, (elem, index) => {
-            if(elem === event.target) {
+        let colors = this.element.children;
+        [].forEach.call(colors, (color, index) => {
+            if(color === event.target) {
                 this.selectedColorIndex = index;
             }
         });
 
-        this.colorChange(this.selectedColor);
+        this._colorChange(this.selectedColor);
     }
 }
