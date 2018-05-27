@@ -17,16 +17,16 @@ export default class Presenter {
 
     toggleTodoItem(event) {
         const listItem = event.target.parentNode;
-        this.view.toggleTodoItem(listItem);
+        this.model.toggleTodoItem(listItem);
     }
 
     editTodoItem(event) {
         const listItem = event.target.parentNode;
-        this.view.editTodoItem(listItem);
+        this.model.editTodoItem(listItem);
     }
 
     deleteTodoItem(event) {
         const listItem = event.target.parentNode;
-        this.view.deleteTodoItem(listItem);
+        this.model.deleteTodoItem(this.view.todoList, listItem);
     }
 }

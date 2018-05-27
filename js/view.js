@@ -48,31 +48,4 @@ export default class View {
         event.preventDefault();        
         this.presenter.createTodoItem(this.todoList);
     }
-
-    // Не знаю. Может нижние методы отнести в Model?
-
-    toggleTodoItem(element) {
-        element.classList.toggle('completed');
-    }
-
-    editTodoItem(element) {
-        const title = element.querySelector('.title');
-        const editInput = element.querySelector('.textfield');
-        const editButton = element.querySelector('.edit');        
-        const isEditing = element.classList.contains('editing');
-
-        if (isEditing) {
-            title.innerText = editInput.value;
-            editButton.innerText = 'Изменить';
-        } else {
-            editInput.value = title.innerText;
-            editButton.innerText = 'Сохранить';
-        }
-
-        element.classList.toggle('editing');
-    }
-
-    deleteTodoItem(element) {
-        this.todoList.removeChild(element);
-    }
 }
