@@ -1,4 +1,5 @@
 export default class Cell {
+    
     constructor({ element, row, col, alive = false }) {
         // опредлить свойства
 
