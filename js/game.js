@@ -96,11 +96,13 @@ export default class Game {
     handleSpeedSliderChange(event) {
         // получить значение слайдера
         this.gameSpeed = event.target.value;
+        if (this.onPlay) {
         // очистить интервал
-        clearInterval(this.gameInterval);
+            clearInterval(this.gameInterval);
         // запустить интервал с новой скоростью
-        this.gameInterval = setInterval(() => {
-            this.grid.next()
-        }, 1000 - this.gameSpeed);
+            this.gameInterval = setInterval(() => {
+                this.grid.next()
+            }, 1000 - this.gameSpeed); 
+        }
     }
 }
