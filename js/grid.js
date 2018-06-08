@@ -104,6 +104,6 @@ export default class Grid {
             })
         })
         // обнулить буфер
-        
+        this.cellsBuffer = [];
     }
 }
