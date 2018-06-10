@@ -2,30 +2,21 @@ import Cell from "./cell.js";
 
 export default class Grid {
     constructor({ element, size }) {
-        // определить свойства
         this.element = element;
         this.size = size;
-        // доинициализировать свойства в методе `init`
         this.init();
     }
 
     init(randomize) {
         this.element.innerHTML = '';
-        // создать таблицу и сохранить ее в свойство
         let tableElement = document.createElement('table');
-        // создать массивы для клеток и буфера (временное хранение для расчета следующего поколения)
         this.cells = [];
-        this.cellsBuffer = [];        
-        // перебрать ряды
+        this.cellsBuffer = [];
         for (let row = 0; row < this.size; row++) {
-            // создать элемент tr
             let rowElement = document.createElement('tr');
-            // доинициализировать массивы для клеток и буфера
             this.cells[row] = [];
-            this.cellsBuffer[row] = [];
-            // перебрать столбцы
+            // this.cellsBuffer[row] = [];
             for (let col = 0; col < this.size; col++) {
-                // создать клетку
                 let cellElement = document.createElement('td');
                 let alive = false;   
                 if (randomize) {
@@ -37,17 +28,12 @@ export default class Grid {
                     col: col,
                     alive: alive
                 });
-                // добавить ее в ряд
                 rowElement.appendChild(cellElement);
-                // сохранить ее в сетку
                 this.cells[row][col] = cell;
-                // продублировать значение в буфере
-                this.cellsBuffer[row][col] = cell;
+                // this.cellsBuffer[row][col] = cell;
             }
-            // добавить ряд в таблицу
             tableElement.appendChild(rowElement);
         }        
-        // добавить таблицу в элемент
         this.element.appendChild(tableElement);
     }
 
@@ -58,7 +44,6 @@ export default class Grid {
     }
 
     countNeighbors(cell) {
-        // высчитать и вернуть количество соседей у клетки
         let { row, col } = cell;
         let count = 0;
         if (this.cellExistenceAndAlive(row - 1, col - 1)) count += 1;
@@ -73,37 +58,41 @@ export default class Grid {
     }
 
     reset() {
-        // привести сетку в исходное состояние
         this.init();
     }
 
     resetBuffer() {
-        // привести буфер в исходное состояние
         this.cellsBuffer = [];
     }
 
     randomize() {
-        // определить случайное состояние для сетки
         return Math.random() < .5;
     }
 
     next() {
-        // высчитать следующее поколение клеток
-        this.cells.forEach(row => {
+        this.cellsBuffer = [];
+        
+        this.cells.forEach((row, index) => {
+            this.cellsBuffer[index] = [];
             row.forEach(cell => {
+                this.cellsBuffer[cell.row][cell.col] = true;
                 if (cell.alive) {
                     if (this.countNeighbors(cell) < 2 || this.countNeighbors(cell) > 3) {
-                        cell.alive = false;
+                        this.cellsBuffer[cell.row][cell.col] = false;
                     }
                 } else {
-                    if (this.countNeighbors(cell) === 3) {
-                        cell.alive = true;
+                    if (this.countNeighbors(cell) !== 3) {
+                        this.cellsBuffer[cell.row][cell.col] = false;
                     }
                 }
                 
             })
         })
-        // обнулить буфер
+        this.cells.forEach(row => {
+            row.forEach(cell => {
+                cell.alive = this.cellsBuffer[cell.row][cell.col];
+            })
+        })
         this.cellsBuffer = [];
     }
 }
