@@ -5,28 +5,34 @@ export default class Presenter {
         this.view = view;
     }
 
-    createTodoItem(todoList) {
-        if (this.view.addInputValue === '') {
-            return alert('Необходимо ввести название задачи.');
-        }
-        const todoItem = this.model.createTodoItem(this.view.addInputValue);
-        this.view.bindEvents(todoItem);
-        this.model.addItemToList(todoList, todoItem);
+    renderTodoList() {
+        this.view.clearTodoList();
+        this.model.todos.forEach(todo => {
+            let todoItem = this.view.createTodoItem(todo);
+            this.view.bindEvents(todoItem);
+            this.view.addItemToList(todoItem);
+        });
+    }
+
+    createTodoItem(value) {
+        let newTodo = this.model.add(value);
+        let newTodoItem = this.view.createTodoItem(newTodo);
+        this.view.bindEvents(newTodoItem);
+        this.view.addItemToList(newTodoItem);
         this.view.addInputValue = '';
     }
 
-    toggleTodoItem(event) {
-        const listItem = event.target.parentNode;
-        this.model.toggleTodoItem(listItem);
+    toggleTodoItem(id) {
+        let toggledTodo = this.model.toggle(id);
+        this.view.toggleTodoItem(toggledTodo);
     }
 
-    editTodoItem(event) {
-        const listItem = event.target.parentNode;
-        this.model.editTodoItem(listItem);
+    editTodoItem(id, title) {
+        this.view.editTodoItem(this.model.edit(id, title));
     }
 
-    deleteTodoItem(event) {
-        const listItem = event.target.parentNode;
-        this.model.deleteTodoItem(this.view.todoList, listItem);
+    deleteTodoItem(id) {
+        this.model.delete(id);
+        this.view.deleteTodoItem(id);
     }
 }

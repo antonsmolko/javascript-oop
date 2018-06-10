@@ -1,44 +1,44 @@
-import { createElement } from './dom.js';
-
 export default class Model {
-    
-    createTodoItem(title) {
-        const checkbox = createElement('input', { type: 'checkbox', className: 'checkbox' });
-        const label = createElement('label', { className: 'title' }, title);
-        const editInput = createElement('input', { type: 'text', className: 'textfield' });
-        const editButton = createElement('button', { className: 'edit' }, 'Изменить');
-        const deleteButton = createElement('button', { className: 'delete' }, 'Удалить');
-        const listItem = createElement('li', { className: 'todo-item' }, checkbox, label, editInput, editButton, deleteButton);
-    
-        return listItem;
+    constructor() {
+        this.id = 1;
+        this.todos = [];
+    }
+    add(value) {
+        let newTodo = {
+            id: `todo-${this.id}`,
+            title: value,
+            completed: false,
+            editing: false
+        };
+        this.todos.push(newTodo);
+        this.id += 1;
+        return newTodo;
     }
 
-    addItemToList(todoList, todoItem) {
-        todoList.appendChild(todoItem);
+    edit(id, title) {
+        let editingTodo;
+        this.todos.map(todo => {
+            if (todo.id === id) {
+                todo.editing = !todo.editing;
+                todo.title = title;
+                editingTodo = todo;
+            }
+        });
+        return editingTodo;
     }
 
-    toggleTodoItem(element) {
-        element.classList.toggle('completed');
+    delete(id) {
+        this.todos = this.todos.filter(todo => todo.id !== id);
     }
 
-    editTodoItem(element) {
-        const title = element.querySelector('.title');
-        const editInput = element.querySelector('.textfield');
-        const editButton = element.querySelector('.edit');        
-        const isEditing = element.classList.contains('editing');
-
-        if (isEditing) {
-            title.innerText = editInput.value;
-            editButton.innerText = 'Изменить';
-        } else {
-            editInput.value = title.innerText;
-            editButton.innerText = 'Сохранить';
-        }
-
-        element.classList.toggle('editing');
-    }
-
-    deleteTodoItem(todoList, element) {
-        todoList.removeChild(element);
+    toggle(id) {
+        let toggledTodo;
+        this.todos.map(todo => {
+            if (todo.id === id) {
+                todo.completed = !todo.completed;
+                toggledTodo = todo;
+            }
+        });
+        return toggledTodo;
     }
 }
