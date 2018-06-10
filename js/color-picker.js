@@ -10,7 +10,7 @@ export default class ColorPicker {
             green: 0,
             blue: 0
         };
-        this._colorPreview = this._defaultPreview;
+        this._colorPreview = {...this._defaultPreview};
         this.init();        
     }
 
@@ -31,7 +31,7 @@ export default class ColorPicker {
 
     set open(value) {
         this.element.classList.toggle('open', value);
-        this.render(this._colorPreview);
+        this.render(this._defaultPreview);
     }
 
     set colorPreview(slider) {
@@ -56,6 +56,7 @@ export default class ColorPicker {
         [].forEach.call(this._sliders, slider => {
             slider.value = 0;
         });
+        this.render(this._defaultPreview);
     }
 
     handleClickClose() {
@@ -68,7 +69,7 @@ export default class ColorPicker {
     }
 
     handleClickCheck() {
-        this.addColor(this._colorPreview);
+        this.addColor({...this._colorPreview});
         this.open = false;
         this.setDefault();
     }
